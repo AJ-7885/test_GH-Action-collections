@@ -25,9 +25,9 @@ jobs:
           github-token: ${{ secrets.GH_TOKEN_ACTION }}
           script: |
             await github.rest.actions.createWorkflowDispatch({
-              owner: 'idealo',
-              repo: 'ids-assets',
-              workflow_id: 'deploy-to-akamai.yml',
+              owner: 'aj-7885',
+              repo: 'main-repo',
+              workflow_id: 'my-main-action.yml',
               ref: 'main'
             })
 
