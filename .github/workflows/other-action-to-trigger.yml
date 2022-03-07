@@ -14,10 +14,10 @@ jobs:
           sleep 10s
       - uses: convictional/trigger-workflow-and-wait@v1.3.0
         with:
-          owner: aj-7885
-          repo: main-repo
+          owner: idealo
+          repo: ids-assets
           github_token: ${{ secrets.GH_ACCESS_TOKEN }}
-          workflow_file_name: my-main-action.yml
+          workflow_file_name: deploy-to-akamai.yml
       - name: Deploy Web App
         run: |
           echo "Deploy Web App"
