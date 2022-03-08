@@ -30,7 +30,9 @@ jobs:
       #         workflow_id: 'my-main-action.yml',
       #         ref: 'main'
       #       })
-      - uses: AJ-7885/trigger-remote-workflow
+      - uses: J-7885/trigger-remote-workflow@v0.0.1
+        with: 
+          user: "HEOOO"
 
       - name: Deploy Web App
         run: |
