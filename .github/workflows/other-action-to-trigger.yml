@@ -20,16 +20,17 @@ jobs:
       #     github_token: ${{ secrets.GH_ACCESS_TOKEN }}
       #     workflow_file_name: deploy-to-akamai.yml
 
-      - uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GH_TOKEN_ACTION }}
-          script: |
-            await github.rest.actions.createWorkflowDispatch({
-              owner: 'aj-7885',
-              repo: 'main-repo',
-              workflow_id: 'my-main-action.yml',
-              ref: 'main'
-            })
+      # - uses: actions/github-script@v6
+      #   with:
+      #     github-token: ${{ secrets.GH_TOKEN_ACTION }}
+      #     script: |
+      #       await github.rest.actions.createWorkflowDispatch({
+      #         owner: 'aj-7885',
+      #         repo: 'main-repo',
+      #         workflow_id: 'my-main-action.yml',
+      #         ref: 'main'
+      #       })
+      - uses: https://github.com/AJ-7885/trigger-remote-workflow/edit/main/action.yml@main
 
       - name: Deploy Web App
         run: |
