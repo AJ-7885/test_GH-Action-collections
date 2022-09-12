@@ -20,3 +20,14 @@ jobs:
         # with:
         #   name: octobay/${{ env.PR_REPO_NAME }}
         #   access-token: ${{ secrets.PAT }}
+
+      - name: Check output
+        run: |
+          echo "${GITHUB_REF##*/}"
+          echo ${{ steps.vars }}
+          echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
+          echo "Tag name from github.ref_name: ${{  github.ref_name }}"
+          echo "path : ${{ github.event_path }}"
+          echo "${{ github.run_id }}-${{ github.run_attempt }}-${{github.run_number}}"
+          echo "Current Job : ${{ github.job }}"
+          
