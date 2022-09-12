@@ -1,0 +1,17 @@
+name: Pull Request Title Convention Check
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  sonarcloud:
+    name: Checking pull request title based on semantic version.
+    
+    runs-on: ubuntu-latest
+    steps:
+      - uses: deepakputhraya/action-pr-title@master
+        with:
+          regex: '(feat|fix|perf|no-release)\([\w\-]+\):\s.*' # Regex the title should match.
+          allowed_prefixes: 'perf,feat,fix,no-release' # title should start with the given prefix
+          prefix_case_sensitive: true # title prefix are case insensitive
+          github_token: ${{ github.token }} # Default: ${{ github.token }}

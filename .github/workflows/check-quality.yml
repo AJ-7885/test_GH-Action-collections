@@ -1,0 +1,75 @@
+name: Quality Gates
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths-ignore:
+      - 'package.json'
+      - 'CHANGELOG.md'
+      - 'README.md'
+      - 'CONTRIBUTING.md'
+      - 'CODE_OF_CONDUCT.md'
+      - 'SECURITY.md'
+jobs:
+  sonarcloud:
+    name: Testing 
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }} ⚙️
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: https://npm.pkg.github.com/
+          always-auth: true
+          cache: 'yarn'
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+#       - name: Install NPM dependencies 📦
+#         run: yarn install
+#         env:
+#           NODE_AUTH_TOKEN: ${{secrets.IDEALOBOT_READ_PACKAGES}}
+
+      # - name: Run linting tests 🚬
+      #   run: yarn lint
+
+      # - name: Running unit tests & snapshot test 🚬
+      #   run: yarn test
+
+      # - name: Build  ⚒️
+      #   run: yarn build
+          
+#       - name: Build storybook  ⚒️
+#         run: yarn build:storybook
+
+      - name: Check output
+        run: |
+          echo "${GITHUB_REF##*/}"
+          echo ${{ steps.vars }}
+          echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
+          echo "Tag name from github.ref_name: ${{  github.ref_name }}"
+          echo "path : ${{ github.event_path }}"
+          echo "${{ github.run_id }}-${{ github.run_attempt }}-${{github.run_number}}"
+          echo "Current Job : ${{ github.job }}"
+          
+    
+        
+#               echo "${{ date +%s }}"
+#       - name: Deploy storybook to GitHub Pages 🚀
+#         uses: peaceiris/actions-gh-pages@v3
+#         with:
+#           github_token: ${{ secrets.GITHUB_TOKEN }}
+#           publish_dir: ./src
+#           destination_dir: ${{ github.event.pull_request.number }}
+#           publish_branch: storybook
+               
+
+      # - name: SonarCloud Scan
+      #   uses: SonarSource/sonarcloud-github-action@master
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

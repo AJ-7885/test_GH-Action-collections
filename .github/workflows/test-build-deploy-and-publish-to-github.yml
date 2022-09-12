@@ -1,0 +1,80 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Build, Test, Deploy and publish to Github
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'package.json'
+      - 'CHANGELOG.md'
+      - 'README.md'
+      - 'CONTRIBUTING.md'
+      - 'CODE_OF_CONDUCT.md'
+      - 'SECURITY.md'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+
+      - name: Use Node.js ${{ matrix.node-version }} ⚙️
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: https://npm.pkg.github.com/
+          always-auth: true
+          cache: 'yarn'
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Install NPM dependencies 📦
+        run: yarn install
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.IDEALOBOT_READ_PACKAGES}}
+
+      - name: Run linting tests 🚬
+        run: yarn lint
+
+      - name: Running unit tests & snapshot test 🚬
+        run: yarn test
+
+      - name: Build ⚒️
+        run: yarn build
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Build storybook 🔮
+        run: yarn build:storybook
+
+      - name: Deploy storybook to GitHub Pages 🚀
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./storybook-static
+          publish_branch: storybook
+
+      - name: cleanup before publishing the artifact
+        run: rm -rf node_modules/ | rm -rf infra/ | rm -rf .husky/ | rm -rf .storybook/ | rm -rf .github/ | rm -rf .tools/
+
+      - name: Create a release and publish to npm (if the commit-message instructs to do)
+        id: semantic
+        uses: cycjimmy/semantic-release-action@v2
+        with:
+          extra_plugins: |
+            @semantic-release/git
+        env:
+          GITHUB_TOKEN: ${{secrets.GH_TOKEN_ACTION}}
+          NPM_TOKEN: ${{secrets.GH_TOKEN_ACTION}}
