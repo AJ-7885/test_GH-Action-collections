@@ -1,25 +1,34 @@
-name: Delete Pull Request Deployment
+name: Remove PR base storybook from storybook branch
 on:
+  workflow_dispatch:
   pull_request:
-    branches: [ main ]
-    types: [ closed ]
-    paths-ignore:
-      # - '.github/workflows/**'
-      - '**.md'
+   types: [opened, synchronize, reopened]
+  # push:
+    # branches: [ main ]
+    # types: [ closed ]
 
 env:
-  PR_REPO_NAME: pr-${{ github.event.pull_request.node_id }}
+  PR_NAME: pr-${{ github.event.pull_request.number }}
 
 jobs:
   delete-page-host:
     runs-on: ubuntu-latest
     steps:
-      - name: Delete folder for temporary deployment from demo branch
-        uses: echo ${{ env.PR_REPO_NAME }}
-        # uses: octobay/delete-repository-action@v1
-        # with:
-        #   name: octobay/${{ env.PR_REPO_NAME }}
-        #   access-token: ${{ secrets.PAT }}
+      - uses: actions/checkout@v3
+        with:
+          ref: storybook
+
+      # https://github.com/actions/checkout#push-a-commit-using-the-built-in-token
+      - name: Set GitHub Actions as Commit Author
+        run: |
+          git config --global user.name github-actions
+          git config --global user.email github-actions@github.com
+
+      - name: remove folder for temporary deployment from story branch and push back to storybook branch
+        run: |
+          rm -rf ${{ env.PR_NAME }}
+          git commit -am "removed ${{ env.PR_NAME }} folder"
+          git push
 
       - name: Check output
         run: |
@@ -28,6 +37,5 @@ jobs:
           echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
           echo "Tag name from github.ref_name: ${{  github.ref_name }}"
           echo "path : ${{ github.event_path }}"
-          echo "${{ github.run_id }}-${{ github.run_attempt }}-${{github.run_number}}"
+          echo "beta-${{ github.run_id }}-${{ github.run_attempt }}-${{github.run_number}}"
           echo "Current Job : ${{ github.job }}"
-          
