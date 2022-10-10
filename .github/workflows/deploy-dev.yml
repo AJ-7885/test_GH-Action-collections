@@ -25,7 +25,7 @@ jobs:
           git config --global user.email github-actions@github.com
           
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3.1.0
         with:
           path: 'build'
       
@@ -41,7 +41,7 @@ jobs:
           cd ..
       
       - name: Checkout Dev Target
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3.1.0
         with:
           repository: octobay/app-dev
           path: 'deploy'
