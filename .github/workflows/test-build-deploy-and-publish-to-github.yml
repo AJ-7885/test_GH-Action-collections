@@ -71,7 +71,7 @@ jobs:
 
       - name: Create a release and publish to npm (if the commit-message instructs to do)
         id: semantic
-        uses: cycjimmy/semantic-release-action@v2
+        uses: cycjimmy/semantic-release-action@v4
         with:
           extra_plugins: |
             @semantic-release/git
