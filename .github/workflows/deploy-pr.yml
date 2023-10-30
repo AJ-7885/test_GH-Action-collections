@@ -28,7 +28,7 @@ jobs:
       url: https://octobay.github.io/${{ env.PR_REPO_NAME }}/
     steps:
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
       
       # https://github.com/actions/checkout#push-a-commit-using-the-built-in-token
       - name: Set GitHub Actions as Commit Author
