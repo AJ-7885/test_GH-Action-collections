@@ -1,0 +1,29 @@
+repo_name: AJ-7885/test_GH-Action-collections
+report_id: 86fecab56968f84914fef81cd4d3e589
+repo_type: Public
+timestamp: '2023-11-12T13:14:37+00:00'
+requested_by: AJ-7885
+provider: github
+branch: main
+detected_tools_count: 2
+tools:
+- name: Git
+  description: Fast, scalable, distributed revision control system
+  website_url: http://git-scm.com/
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Version Control System
+  image_url: https://img.stackshare.io/service/1046/git.png
+  detection_source: Repo Metadata
+- name: GitHub Actions
+  description: Automate your workflow from idea to production
+  website_url: https://github.com/features/actions
+  open_source: false
+  hosted_saas: true
+  category: Build, Test, Deploy
+  sub_category: Continuous Integration
+  image_url: https://img.stackshare.io/service/11563/actions.png
+  detection_source: ".github/workflows/test-build-deploy-and-publish-to-github.yml"
+  last_updated_by: AJ
+  last_updated_on: 2022-09-12 20:36:22.000000000 Z
